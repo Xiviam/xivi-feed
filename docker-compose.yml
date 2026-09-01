@@ -1,0 +1,32 @@
+services:
+  xivi-feed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xivi-feed:latest
+    container_name: xivi-feed
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATA_DIR: /app/data
+      DATABASE_PATH: /app/data/xivi.sqlite
+    volumes:
+      - xivi_feed_data:/app/data
+    ports:
+      - "127.0.0.1:4350:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  xivi_feed_data:

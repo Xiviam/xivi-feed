@@ -1,0 +1,12 @@
+node_modules
+dist
+server-dist
+data
+.git
+.env
+.next
+.vinext
+.wrangler
+work
+outputs
+*.log
